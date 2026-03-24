@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation</title>
+    <style>
+        body { 
+            text-align: center; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f4f2; 
+            padding: 50px 20px;
+        }
+        .container { max-width: 500px; margin: auto; }
+        h1 { color: #8d6e63; }
+        
+        #claimBtn { 
+            padding: 15px 30px; 
+            font-size: 18px; 
+            cursor: pointer; 
+            background: #d4a373; 
+            color: white; 
+            border: none; 
+            border-radius: 25px;
+            transition: 0.3s;
+            display: none; 
+        }
+        #claimBtn:hover { background: #bc8a5f; }
+        
+        .hidden { display: none !important; }
+        #message { margin-top: 20px; color: #5d4037; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>You're Invited!</h1>
+        <p>We have a special surprise for our first 20 guests.</p>
+        
+        <button id="claimBtn">Reveal My Surprise</button>
+        <p id="message">Checking availability...</p>
+    </div>
+
+    <script>
+        const scriptURL = 'https://docs.google.com/spreadsheets/d/1Se4DRi-Tpe7BzjrzVcM4Fifb_Tv98zZtiXh117Ryu0Q/edit?usp=sharing';
+        const btn = document.getElementById('claimBtn');
+        const msg = document.getElementById('message');
+
+    
+        btn.style.display = "inline-block";
+        msg.innerText = "";
+
+        btn.addEventListener('click', function() {
+            btn.innerText = "Opening...";
+            btn.disabled = true;
+
+            fetch(scriptURL)
+                .then(response => response.text())
+                .then(result => {
+                    if (result.trim() === "EMPTY") {
+                        btn.classList.add('hidden');
+                        msg.innerText = "The special surprises have all been claimed, but we can't wait to see you there!";
+                    } else {
+                        window.location.href = result; 
+                    }
+                })
+                .catch(err => {
+                    btn.disabled = false;
+                    btn.innerText = "Try Again";
+                    console.error(err);
+                });
+        });
+    </script>
+</body>
+</html>
