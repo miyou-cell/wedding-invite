@@ -23,11 +23,10 @@
             border: none; 
             border-radius: 25px;
             transition: 0.3s;
+            /* Button starts hidden and shows up once JS loads */
             display: none; 
         }
         #claimBtn:hover { background: #bc8a5f; }
-        
-        .hidden { display: none !important; }
         #message { margin-top: 20px; color: #5d4037; font-style: italic; }
     </style>
 </head>
@@ -46,6 +45,12 @@
     const btn = document.getElementById('claimBtn');
     const msg = document.getElementById('message');
 
+    // --- FIX: SHOW THE BUTTON WHEN PAGE LOADS ---
+    window.onload = function() {
+        btn.style.display = 'inline-block';
+        msg.innerText = "";
+    };
+
     btn.addEventListener('click', function() {
         btn.innerText = "Opening Surprise...";
         btn.disabled = true;
@@ -59,22 +64,23 @@
                     btn.style.display = 'none';
                     msg.innerHTML = "<b>All surprises have been claimed!</b><br>We can't wait to see you at the wedding.";
                 } else if (link.startsWith("http")) {
-                    // Try to redirect automatically
+                    // Redirect to Shopee
                     window.location.replace(link);
                     
-                    // Fallback: If redirect is blocked, show the link manually
+                    // Fallback: If browser blocks redirect
                     setTimeout(() => {
-                        msg.innerHTML = `Your surprise is ready! <a href="${link}">Click here if it didn't open automatically.</a>`;
+                        msg.innerHTML = `Your surprise is ready! <a href="${link}" target="_blank">Click here to open.</a>`;
                     }, 2000);
                 } else {
-                    msg.innerText = "Something went wrong. Please refresh and try again.";
+                    msg.innerText = "Error: Invalid link. Please refresh.";
                     btn.disabled = false;
                 }
             })
             .catch(err => {
                 console.error(err);
-                msg.innerText = "Connection error. Please check your internet.";
+                msg.innerText = "Connection error. Please try again.";
                 btn.disabled = false;
+                btn.innerText = "Reveal My Surprise";
             });
     });
 </script>
