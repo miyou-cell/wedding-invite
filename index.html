@@ -42,34 +42,42 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzy-8GX9G-mmgw0YmL7o8MqCVzNau-dFlodVhBr8wOjrqJFe1FvvoGYWgR2CMIFwckQ9A/exec';
-        const btn = document.getElementById('claimBtn');
-        const msg = document.getElementById('message');
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyRVIE1sQ4dV-DdsJdVSg4nD4KlM_RV_eMTnml8pnU96EgGwP0Krt5vm8yV7m1cUBvFCw/exec';
+    const btn = document.getElementById('claimBtn');
+    const msg = document.getElementById('message');
 
-    
-        btn.style.display = "inline-block";
-        msg.innerText = "";
+    btn.addEventListener('click', function() {
+        btn.innerText = "Opening Surprise...";
+        btn.disabled = true;
 
-        btn.addEventListener('click', function() {
-            btn.innerText = "Opening...";
-            btn.disabled = true;
+        fetch(scriptURL)
+            .then(response => response.text())
+            .then(result => {
+                const link = result.trim();
 
-            fetch(scriptURL)
-                .then(response => response.text())
-                .then(result => {
-                    if (result.trim() === "EMPTY") {
-                        btn.classList.add('hidden');
-                        msg.innerText = "The special surprises have all been claimed, but we can't wait to see you there!";
-                    } else {
-                        window.location.href = result; 
-                    }
-                })
-                .catch(err => {
+                if (link === "EMPTY") {
+                    btn.style.display = 'none';
+                    msg.innerHTML = "<b>All surprises have been claimed!</b><br>We can't wait to see you at the wedding.";
+                } else if (link.startsWith("http")) {
+                    // Try to redirect automatically
+                    window.location.replace(link);
+                    
+                    // Fallback: If redirect is blocked, show the link manually
+                    setTimeout(() => {
+                        msg.innerHTML = `Your surprise is ready! <a href="${link}">Click here if it didn't open automatically.</a>`;
+                    }, 2000);
+                } else {
+                    msg.innerText = "Something went wrong. Please refresh and try again.";
                     btn.disabled = false;
-                    btn.innerText = "Try Again";
-                    console.error(err);
-                });
-        });
-    </script>
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                msg.innerText = "Connection error. Please check your internet.";
+                btn.disabled = false;
+            });
+    });
+</script>
+    
 </body>
 </html>
