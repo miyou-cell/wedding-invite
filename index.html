@@ -23,7 +23,6 @@
             border: none; 
             border-radius: 25px;
             transition: 0.3s;
-            /* Button starts hidden and shows up once JS loads */
             display: none; 
         }
         #claimBtn:hover { background: #bc8a5f; }
@@ -36,7 +35,7 @@
         <h1>You're Invited!</h1>
         <p>We have a special surprise for our first 20 guests.</p>
         
-        <button id="claimBtn">Reveal My Surprise</button>
+        <button id="claimBtn">Wishlist</button>
         <p id="message">Checking availability...</p>
     </div>
 
@@ -45,7 +44,6 @@
     const btn = document.getElementById('claimBtn');
     const msg = document.getElementById('message');
 
-    // --- FIX: SHOW THE BUTTON WHEN PAGE LOADS ---
     window.onload = function() {
         btn.style.display = 'inline-block';
         msg.innerText = "";
