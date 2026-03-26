@@ -50,7 +50,7 @@
     };
 
     btn.addEventListener('click', function() {
-        btn.innerText = "Opening Surprise...";
+        btn.innerText = "Opening Wishlist...";
         btn.disabled = true;
 
         fetch(scriptURL)
@@ -60,7 +60,7 @@
 
                 if (link === "EMPTY") {
                     btn.style.display = 'none';
-                    msg.innerHTML = "<b>All surprises have been claimed!</b><br>We can't wait to see you at the wedding.";
+                    msg.innerHTML = "<b>All wishlist have been claimed!</b><br>We can't wait to see you at the wedding.";
                 } else if (link.startsWith("http")) {
                     // Redirect to Shopee
                     window.location.replace(link);
